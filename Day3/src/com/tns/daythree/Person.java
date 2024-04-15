@@ -3,7 +3,7 @@ package com.tns.daythree;
 public class Person {
 	private String personName;
 	private int personAge;
-	private String personCity;
+	private  String personCity;
 	public String getPersonName(){
 		return personName;
 	}
@@ -28,16 +28,12 @@ public class Person {
 	}
 	public static void main(String[] args) {
 		Person p=new Person();
-		p.setPersonName("Arjun");
-		p.setPersonAge(20);
-		p.setPersonCity("Chennai");
-		System.out.println(p.getPersonName());
-		System.out.println(p.getPersonAge());
-		System.out.println(p.getPersonCity());
-		System.out.println(p.toString());
+		System.out.println(p);
+		
 		
 
 		
 	}
+	
 
 }

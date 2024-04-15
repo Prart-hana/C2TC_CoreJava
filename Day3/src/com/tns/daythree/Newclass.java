@@ -12,15 +12,15 @@ public class Newclass {
 		name=sc.nextLine();
 		age=sc.nextInt();
 		city=sc.nextLine();
-		p.setPersonName(Arjun);
-		p.setPersonAge(20);
-		p.setPersonCity(Chennai);
+		p.setPersonName(name);
+		p.setPersonAge(age);
+		p.setPersonCity(city);
 		System.out.println("enter personal details:"+p.getPersonName()+ "\tAge:"+p.getPersonAge()+"\tCity:"+p.getPersonCity());
 		System.out.println("enter personal details:Name,age and city");
 		name=sc.nextLine();
 		age=sc.nextInt();
 		city=sc.nextLine();
-		 p=new Person();
+		 p=new Person(name,age,city);
 		 System.out.println("enter personname:"+p.getPersonName());
 		
 		

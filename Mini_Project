@@ -1,0 +1,114 @@
+package org.employee;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class Employee {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/mydatabase";
+        String id = "root";
+        String pwd = "root";
+        Scanner sc = new Scanner(System.in);
+        int op = 0;
+        int ch = 0;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection conn = DriverManager.getConnection(url, id, pwd);
+
+            if (conn != null) {
+                System.out.println("Connected");
+            }
+
+            do {
+                System.out.println("Enter your choice: 1. Add employee 2. Update 3. Delete 4. Display 0. Exit\n");
+                op = sc.nextInt();
+
+                switch (op) {
+                    case 1:
+                        do {
+                            System.out.println("Enter employee ID");
+                            int eid = sc.nextInt();
+                            sc.nextLine();  
+                            System.out.println("Enter employee name");
+                            String name = sc.nextLine();
+                            System.out.println("Enter designation");
+                            String desc = sc.nextLine();
+                            String sql = "INSERT INTO employee (idemployee, empname, empdesc) VALUES (?, ?, ?)";
+                            PreparedStatement statement = conn.prepareStatement(sql);
+                            statement.setInt(1, eid);
+                            statement.setString(2, name);
+                            statement.setString(3, desc);
+                            int rowInserted = statement.executeUpdate();
+                            if (rowInserted > 0) {
+                                System.out.println("A new User was inserted successfully");
+                            }
+                            System.out.println("Do you want to continue (1 for Yes / 0 for No)?");
+                            ch = sc.nextInt();
+                        } while (ch == 1);
+                        break;
+                    case 2:
+                        System.out.println("Enter records for updation");
+                        System.out.println("Enter employee ID whose records are to be updated");
+                        int uid = sc.nextInt();
+                        sc.nextLine();  // Consume newline
+                        System.out.println("Enter updated employee name");
+                        String uname = sc.nextLine();
+                        System.out.println("Enter employee designation");
+                        String udesc = sc.nextLine();
+                        String sql2 = "UPDATE employee SET empname=?, empdesc=? WHERE idemployee=?";
+                        PreparedStatement statement2 = conn.prepareStatement(sql2);
+                        statement2.setString(1, uname);
+                        statement2.setString(2, udesc);
+                        statement2.setInt(3, uid);
+                        int rowsUpdated = statement2.executeUpdate();
+                        if (rowsUpdated > 0) {
+                            System.out.println("A User was updated successfully");
+                        }
+                        break;
+                    case 3:
+                        System.out.println("Enter record for deletion");
+                        System.out.println("Enter employee ID whose records are to be deleted");
+                        int did = sc.nextInt();
+                        String sql3 = "DELETE FROM employee WHERE idemployee=?";
+                        PreparedStatement statement3 = conn.prepareStatement(sql3);
+                        statement3.setInt(1, did);
+                        int rowsDeleted = statement3.executeUpdate();
+                        if (rowsDeleted > 0) {
+                            System.out.println("A User was deleted successfully");
+                        }
+                        break;
+                    case 4:
+                        String sql1 = "SELECT * FROM employee";
+                        Statement stmt = conn.createStatement();
+                        ResultSet rs = stmt.executeQuery(sql1);
+                        int count = 0;
+                        while (rs.next()) {
+                            int eid = rs.getInt("idemployee");
+                            String ename = rs.getString("empname");
+                            String edesc = rs.getString("empdesc");
+                            String output = "Employee %d: %d - %s - %s";
+                            System.out.println(String.format(output, ++count, eid, ename, edesc));
+                        }
+                        break;
+                    case 0:
+                        System.out.println("Exiting...");
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                }
+            } while (op != 0);
+
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            sc.close();
+        }
+    }
+}
